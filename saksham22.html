@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaurav Vadehra | Premium Astrology, Vastu & Meditation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght=300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #1a1512; overflow: hidden; }
+        h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+        .gold-text { color: #b48f44; }
+        .gold-bg { background-color: #b48f44; }
+        .dark-bg { background-color: #1a1512; }
+        
+        /* Premium Button Enhancements */
+        .btn-gold { 
+            background-color: #b48f44; 
+            color: white; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-gold:hover { background-color: #927335; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(180, 143, 110, 0.2); }
+        
+        .whatsapp-glow {
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .whatsapp-glow:hover {
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.5);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* ----------------------------------------------------
+           Presentation Deck Window Framework
+        ---------------------------------------------------- */
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            height: calc(100vh - 80px);
+            overflow: hidden;
+            background-color: #fdf8f0;
+            perspective: 1200px;
+        }
+
+        .presentation-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1;
+            overflow-y: auto;
+            will-change: transform, opacity;
+            transition: all 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Base active state fallback */
+        .presentation-section.active-slide {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+            transform: none !important;
+            filter: none !important;
+        }
+
+        /* Parallax inner text/content lag effect */
+        .presentation-section .parallax-content {
+            transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(20px);
+        }
+        .presentation-section.active-slide .parallax-content {
+            transform: translateY(0px);
+        }
+
+        /* ----------------------------------------------------
+           Unique Section Change Transitions Styles
+        ---------------------------------------------------- */
+        .slide-push-next { transform: translateX(100%); opacity: 0; }
+        .slide-push-prev { transform: translateX(-100%); opacity: 0; }
+
+        .cube-flip-next { transform: translateY(100%) rotateX(-25deg); opacity: 0; transform-origin: top center; }
+        .cube-flip-prev { transform: translateY(-100%) rotateX(25deg); opacity: 0; transform-origin: bottom center; }
+
+        .scale-blur-next { transform: scale(1.15); filter: blur(15px); opacity: 0; }
+        .scale-blur-prev { transform: scale(0.85); filter: blur(15px); opacity: 0; }
+
+        .skew-slide-next { transform: translateX(100%) skewX(-6deg); opacity: 0; }
+        .skew-slide-prev { transform: translateX(-100%) skewX(6deg); opacity: 0; }
+
+        .depth-drop-next { transform: scale(0.75) translateY(40px); opacity: 0; }
+        .depth-drop-prev { transform: scale(1.25) translateY(-40px); opacity: 0; }
+
+        .shutter-next { transform: translateY(100%); opacity: 0; }
+        .shutter-prev { transform: translateY(-100%); opacity: 0; }
+
+        .soft-fade-next { opacity: 0; transform: scale(1.02); }
+        .soft-fade-prev { opacity: 0; transform: scale(0.98); }
+
+        /* ----------------------------------------------------
+           Inner Element Reveal Framework 
+        ---------------------------------------------------- */
+        .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; }
+        .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+        .reveal-right { transform: translateX(45px); }
+        .reveal-right.revealed { transform: translateX(0); }
+        .reveal-left { transform: translateX(-45px); }
+        .reveal-left.revealed { transform: translateX(0); }
+        .reveal-top { transform: translateY(-45px); }
+        .reveal-top.revealed { transform: translateY(0); }
+        .reveal-scale { transform: scale(0.95); }
+        .reveal-scale.revealed { transform: scale(1); }
+
+        .reveal-fade-right { opacity: 0; transform: translateX(40px); transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1), transform 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-fade-right.revealed { opacity: 1; transform: translateX(0); }
+
+        .reveal-scale-up { opacity: 0; transform: scale(0.9); transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1), transform 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-scale-up.revealed { opacity: 1; transform: scale(1); }
+
+        .reveal-flip-3d { opacity: 0; transform: perspective(800px) rotateX(15deg) translateY(30px); transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1), transform 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-flip-3d.revealed { opacity: 1; transform: perspective(800px) rotateX(0deg) translateY(0); }
+
+        .reveal-skew-right { opacity: 0; transform: translateX(50px) skewX(-2deg); transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-skew-right.revealed { opacity: 1; transform: translateX(0) skewX(0); }
+
+        .reveal-blur-left { opacity: 0; transform: translateX(-50px); filter: blur(4px); transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), filter 1.4s ease; }
+        .reveal-blur-left.revealed { opacity: 1; transform: translateX(0); filter: blur(0); }
+
+        .reveal-rotate-up-left { opacity: 0; transform: translateY(40px) rotate(-1deg); transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1), transform 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-rotate-up-left.revealed { opacity: 1; transform: translateY(0) rotate(0); }
+        
+        .reveal-rotate-up-right { opacity: 0; transform: translateY(40px) rotate(1deg); transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1), transform 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-rotate-up-right.revealed { opacity: 1; transform: translateY(0) rotate(0); }
+
+        .reveal-fold-in { opacity: 0; transform: perspective(1000px) rotateY(-6deg) scale(0.96); transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-fold-in.revealed { opacity: 1; transform: perspective(1000px) rotateY(0) scale(1); }
+
+        .reveal-rise { opacity: 0; transform: translateY(40px); transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1), transform 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-rise.revealed { opacity: 1; transform: translateY(0); }
+
+        .reveal-human-figure { opacity: 0; transform: scale(1.05) translateY(10px); filter: grayscale(80%) blur(2px); transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1), filter 1.8s ease; }
+        .reveal-human-figure.revealed { opacity: 1; transform: scale(1) translateY(0); filter: grayscale(0%) blur(0); }
+
+        .reveal-bg-zoom { transform: scale(1.12); opacity: 0; filter: blur(4px); transition: transform 2.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 2s cubic-bezier(0.16, 1, 0.3, 1), filter 2s ease; }
+        .reveal-bg-zoom.revealed { transform: scale(1); opacity: 1; filter: blur(0); }
+
+        .reveal-width { width: 0%; transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-width.revealed { width: 6rem; }
+        .reveal-width-center { width: 0%; transition: width 1.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-width-center.revealed { width: 100%; }
+
+        /* Delays */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-150 { transition-delay: 150ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-450 { transition-delay: 450ms; }
+
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-slide-down { animation: slideDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .nav-link.active-link { color: #b48f44; border-bottom: 2px solid #b48f44; padding-bottom: 2px; }
+
+        /* Audio Wave Animation */
+        .playing .wave-bar { animation: bounce 0.8s ease infinite alternate; }
+        .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+        .playing .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { from { height: 4px; } to { height: 16px; } }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white/95 backdrop-blur-md py-4 px-8 flex justify-between items-center sticky top-0 z-50 shadow-sm border-b border-amber-800/5 animate-slide-down">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white text-[10px] font-bold tracking-widest">GV</div>
+            
+            <!-- Atmospheric Sound Toggle Container -->
+            <button id="audio-toggle" onclick="toggleAtmosphere()" class="flex items-center gap-2 text-[10px] tracking-widest uppercase font-bold text-gray-400 hover:text-amber-600 transition" title="Toggle Atmospheric Soundscape">
+                <div class="w-5 h-5 flex items-center justify-center gap-[2px] h-4">
+                    <span class="wave-bar w-[2px] h-2 bg-amber-600 inline-block rounded-full"></span>
+                    <span class="wave-bar w-[2px] h-3 bg-amber-600 inline-block rounded-full"></span>
+                    <span class="wave-bar w-[2px] h-1 bg-amber-600 inline-block rounded-full"></span>
+                </div>
+                <span id="audio-status">Aura Off</span>
+            </button>
+        </div>
+        <div id="nav-links-container" class="hidden md:flex space-x-6 text-xs font-bold uppercase tracking-widest">
+            <a href="javascript:void(0)" onclick="goToSection(0)" class="nav-link active-link hover:text-amber-700 transition">Home</a>
+            <a href="javascript:void(0)" onclick="goToSection(1)" class="nav-link hover:text-amber-700 transition">Services</a>
+            <a href="javascript:void(0)" onclick="goToSection(2)" class="nav-link hover:text-amber-700 transition">Experience</a>
+            <a href="javascript:void(0)" onclick="goToSection(3)" class="nav-link hover:text-amber-700 transition">IPS System</a>
+            <a href="javascript:void(0)" onclick="goToSection(4)" class="nav-link hover:text-amber-700 transition">Trusted By</a>
+            <a href="javascript:void(0)" onclick="goToSection(7)" class="nav-link hover:text-amber-700 transition">Blog</a>
+        </div>
+        <button onclick="goToSection(8)" class="gold-bg text-white px-6 py-2 rounded text-[10px] font-bold uppercase hover:bg-amber-700 transition tracking-wider shadow-sm">Book Consultation</button>
+    </nav>
+
+    <!-- Slide Deck Container Window -->
+    <div class="presentation-container">
+
+        <!-- Slide 0: Hero Section -->
+        <section class="presentation-section active-slide flex items-center" data-title="Home">
+            <div id="hero-bg" class="absolute inset-0 bg-cover bg-center reveal-on-scroll reveal-bg-zoom" style="background-image: url('input_file_2.png');"></div>
+            <div class="absolute inset-0 bg-black/45"></div>
+            <div class="container mx-auto px-8 relative z-10 flex justify-end parallax-content">
+                <div class="max-w-2xl text-right text-white">
+                    <h1 class="text-4xl md:text-6xl mb-6 italic leading-tight font-serif reveal-on-scroll reveal-fade-right">
+                        Three Decades of <br> Consultancy <br> in <br>
+                        <span class="gold-text">Astrology-Vastu-<br>Meditation</span>
+                    </h1>
+                    <div class="reveal-width h-[1px] bg-amber-500/50 my-6 ml-auto"></div>
+                    <p class="mb-8 text-gray-200 leading-relaxed text-lg text-right reveal-on-scroll reveal-fade-right delay-200">
+                        Decades of proven expertise solving real-life challenges in career, relationships, finances and health.
+                    </p>
+                    <p class="italic gold-text text-xl mb-10 text-right font-serif reveal-on-scroll reveal-fade-right delay-300">"When the right decision matters, guesswork is not an option."</p>
+                    <button onclick="goToSection(8)" class="bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-amber-600 hover:text-white transition-all duration-300 shadow-2xl tracking-wide reveal-on-scroll reveal-fade-right delay-450">Request Personal Consultation</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 1: Explore Services -->
+        <section class="presentation-section py-12 flex flex-col justify-center" data-title="Services">
+            <div class="container mx-auto px-8 w-full parallax-content">
+                <div class="text-center mb-12">
+                    <span class="text-amber-700/60 text-xs tracking-widest block mb-2 reveal-on-scroll reveal-scale-up">❖ EXPERTISE & GUIDANCE ❖</span>
+                    <h2 class="text-3xl uppercase tracking-[0.4em] font-light reveal-on-scroll reveal-scale-up delay-100">Explore Services</h2>
+                    <div class="reveal-width-center h-[1px] bg-amber-800/20 mx-auto mt-4 max-w-[4rem]"></div>
+                </div>
+                <div class="grid md:grid-cols-4 gap-8">
+                    <!-- Service 1 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-amber-800/10 group reveal-on-scroll reveal-left delay-100">
+                        <div class="h-48 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-amber-900/10 group-hover:bg-transparent transition duration-500 z-10"></div>
+                            <img src="input_file_3.png" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Astrology Service">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold mb-2 font-serif text-lg text-gray-900">Astrology</h3>
+                            <p class="text-xs text-gray-500 mb-6 leading-relaxed">Personalized Astrology Consults & Horoscope Matching.</p>
+                            <a href="#" class="gold-text font-bold text-[10px] tracking-widest inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">LEARN MORE +</a>
+                        </div>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-amber-800/10 group reveal-on-scroll reveal-bottom delay-200">
+                        <div class="h-48 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-amber-900/10 group-hover:bg-transparent transition duration-500 z-10"></div>
+                            <img src="input_file_6.png" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Vastu Service">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold mb-2 font-serif text-lg text-gray-900">Vastu</h3>
+                            <p class="text-xs text-gray-500 mb-6 leading-relaxed">Harmony in Perfect Vastu - Residential & Industrial.</p>
+                            <a href="#" class="gold-text font-bold text-[10px] tracking-widest inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">LEARN MORE +</a>
+                        </div>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-amber-800/10 group reveal-on-scroll reveal-top delay-300">
+                        <div class="h-48 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-amber-900/10 group-hover:bg-transparent transition duration-500 z-10"></div>
+                            <img src="input_file_0.jpeg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Live Courses">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold mb-2 font-serif text-lg text-gray-900">Live Courses</h3>
+                            <p class="text-xs text-gray-500 mb-6 leading-relaxed">One to One Live Course in Vedic Astrology & Nadi.</p>
+                            <a href="#" class="gold-text font-bold text-[10px] tracking-widest inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">LEARN MORE +</a>
+                        </div>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 border border-amber-800/10 group reveal-on-scroll reveal-right delay-400">
+                        <div class="h-48 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-amber-900/10 group-hover:bg-transparent transition duration-500 z-10"></div>
+                            <img src="input_file_5.png" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" alt="Meditation Service">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold mb-2 font-serif text-lg text-gray-900">Meditation</h3>
+                            <p class="text-xs text-gray-500 mb-6 leading-relaxed">Experience Deep Calm and Spiritual Enhancement.</p>
+                            <a href="#" class="gold-text font-bold text-[10px] tracking-widest inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">LEARN MORE +</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Experience Stats -->
+        <section class="presentation-section dark-bg text-white flex flex-col justify-center" data-title="Stats">
+            <div class="absolute top-10 left-10 text-amber-500/10 text-3xl animate-pulse">✦</div>
+            <div class="absolute bottom-10 right-10 text-amber-500/10 text-3xl animate-pulse delay-300">✦</div>
+            <div class="container mx-auto px-8 relative z-10 parallax-content">
+                <div class="text-center mb-16">
+                    <span class="gold-text text-xs tracking-widest block mb-2 reveal-on-scroll reveal-scale-up">❖ THE JOURNEY IN NUMBERS ❖</span>
+                    <h2 class="text-2xl md:text-3xl italic gold-text tracking-wide font-light reveal-on-scroll reveal-scale-up delay-100">Experience at a Glance</h2>
+                    <div class="reveal-width-center h-[1px] bg-amber-500/30 mx-auto mt-4 max-w-[3rem]"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-4xl mx-auto">
+                    <div class="p-6 border border-amber-500/10 rounded-xl bg-[#221b17]/50 backdrop-blur-sm reveal-on-scroll reveal-flip-3d delay-100 hover:border-amber-500/30 hover:bg-[#2e241f]/50 transition-all duration-500">
+                        <h3 class="text-4xl md:text-5xl gold-text font-bold font-serif">30+</h3>
+                        <p class="text-[10px] uppercase tracking-widest mt-3 text-gray-400">Years Experience</p>
+                    </div>
+                    <div class="p-6 border border-amber-500/10 rounded-xl bg-[#221b17]/50 backdrop-blur-sm reveal-on-scroll reveal-flip-3d delay-200 hover:border-amber-500/30 hover:bg-[#2e241f]/50 transition-all duration-500">
+                        <h3 class="text-4xl md:text-5xl gold-text font-bold font-serif">100K+</h3>
+                        <p class="text-[10px] uppercase tracking-widest mt-3 text-gray-400">Consultations</p>
+                    </div>
+                    <div class="p-6 border border-amber-500/10 rounded-xl bg-[#221b17]/50 backdrop-blur-sm reveal-on-scroll reveal-flip-3d delay-300 hover:border-amber-500/30 hover:bg-[#2e241f]/50 transition-all duration-500">
+                        <h3 class="text-4xl md:text-5xl gold-text font-bold font-serif">99%</h3>
+                        <p class="text-[10px] uppercase tracking-widest mt-3 text-gray-400">Satisfied Clients</p>
+                    </div>
+                    <div class="p-6 border border-amber-500/10 rounded-xl bg-[#221b17]/50 backdrop-blur-sm reveal-on-scroll reveal-flip-3d delay-450 hover:border-amber-500/30 hover:bg-[#2e241f]/50 transition-all duration-500">
+                        <h3 class="text-4xl md:text-5xl gold-text font-bold font-serif">30+</h3>
+                        <p class="text-[10px] uppercase tracking-widest mt-3 text-gray-400">Workshops</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Interactive IPS Section -->
+        <section class="presentation-section flex items-center" data-title="IPS">
+            <div class="absolute inset-0 bg-cover bg-fixed bg-center reveal-on-scroll reveal-bg-zoom z-0" style="background-image: url('input_file_1.png');"></div>
+            <div class="absolute inset-0 bg-black/70 z-10"></div>
+            <div class="container mx-auto px-8 relative z-20 grid md:grid-cols-2 gap-12 items-center parallax-content">
+                
+                <!-- Interactive Mini-Engine Interface -->
+                <div class="bg-black/40 border border-amber-500/20 backdrop-blur-md p-6 rounded-2xl reveal-on-scroll reveal-left delay-200">
+                    <p class="text-[10px] tracking-widest text-amber-500 font-bold uppercase mb-4">❖ Live Experience Matrix</p>
+                    <h4 class="text-white font-serif text-lg italic mb-4">Select an environment signal parameter:</h4>
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <button onclick="simulateIps('breath')" class="ips-btn bg-white/5 border border-white/10 text-gray-300 p-3 rounded-lg text-left text-xs hover:border-amber-500 transition font-medium">1. Swara (Breath Pattern)</button>
+                        <button onclick="simulateIps('elements')" class="ips-btn bg-white/5 border border-white/10 text-gray-300 p-3 rounded-lg text-left text-xs hover:border-amber-500 transition font-medium">2. Pancha Mahabhuta</button>
+                        <button onclick="simulateIps('direction')" class="ips-btn bg-white/5 border border-white/10 text-gray-300 p-3 rounded-lg text-left text-xs hover:border-amber-500 transition font-medium">3. Compass Vector</button>
+                        <button onclick="simulateIps('sound')" class="ips-btn bg-white/5 border border-white/10 text-gray-300 p-3 rounded-lg text-left text-xs hover:border-amber-500 transition font-medium">4. Immediate Sound Akasha</button>
+                    </div>
+                    <div class="bg-amber-900/20 border border-amber-500/30 p-4 rounded-xl text-center min-h-[90px] flex items-center justify-center">
+                        <p id="ips-display-text" class="text-sm gold-text italic">Click a signal above to preview the Instant Timing Prediction mechanism output.</p>
+                    </div>
+                </div>
+
+                <div class="text-right text-white reveal-on-scroll reveal-skew-right">
+                    <h2 class="text-6xl font-bold mb-2 font-serif">IPS</h2>
+                    <h3 class="italic text-3xl gold-text mb-8">Instant Prediction System</h3>
+                    <div class="space-y-6 text-xl leading-relaxed serif italic text-gray-200">
+                        <p>A practical timing method developed through years of observation and real life event patterns.</p>
+                        <p>It helps understand the direction of a situation by reading the moment in an instant through the environment and the signals around you before making an important decision.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Trusted By Section -->
+        <section class="presentation-section flex items-center" data-title="Trusted By">
+            <div class="absolute inset-0 bg-cover bg-center reveal-on-scroll reveal-bg-zoom z-0" style="background-image: url('input_file_2.png');"></div>
+            <div class="absolute inset-0 bg-white/75 backdrop-blur-[2px] z-10"></div> 
+            <div class="container mx-auto px-8 relative z-20 flex justify-end parallax-content">
+                <div class="max-w-2xl text-right reveal-on-scroll reveal-blur-left delay-150">
+                    <span class="gold-text text-xs tracking-widest block mb-2">❖ A LEGACY OF DISCRETION ❖</span>
+                    <h2 class="text-6xl mb-8 italic font-serif text-gray-900">Trusted By</h2>
+                    <p class="text-xl mb-8 italic text-gray-800 leading-relaxed">
+                        Trusted advisor to founders, business owners & professionals associated with some of India's most respected prominent brands.
+                    </p>
+                    <p class="mb-12 text-gray-600 leading-loose">
+                        His work remains deeply personal & confidential, built on trust developed over years of consistent guidance and accurate insights.
+                    </p>
+                    <button onclick="goToSection(8)" class="gold-bg text-white px-12 py-4 rounded-full font-bold shadow-xl hover:bg-amber-700 transition duration-300">Request Personal Consultation</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: WhatsApp CTA Boxes -->
+        <section class="presentation-section flex flex-col justify-center" data-title="WhatsApp">
+            <div class="container mx-auto px-8 w-full parallax-content">
+                <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto w-full">
+                    <div class="relative bg-[#faf6f0] border-2 border-amber-800/10 p-2 rounded-2xl shadow-sm transition hover:shadow-md reveal-on-scroll reveal-rotate-up-left delay-150">
+                        <div class="border border-amber-800/15 rounded-xl px-8 py-14 bg-white text-center flex flex-col justify-between h-full">
+                            <div>
+                                <h3 class="text-3xl font-serif italic text-gray-900 leading-tight mb-4 text-center">Take Your Consultation <br> Now</h3>
+                                <div class="flex items-center justify-center gap-2 mb-8 text-amber-600/40 text-[9px]">
+                                    <span class="h-[1px] bg-amber-800/10 w-8"></span><span>✦</span><span class="h-[1px] bg-amber-800/10 w-8"></span>
+                                </div>
+                            </div>
+                            <button class="whatsapp-glow bg-[#25D366] text-white px-10 py-4 rounded-full flex items-center justify-center gap-3 mx-auto font-bold uppercase text-xs tracking-widest">
+                                <i class="fab fa-whatsapp text-lg"></i> Connect On WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    <div class="relative bg-[#faf6f0] border-2 border-amber-800/10 p-2 rounded-2xl shadow-sm transition hover:shadow-md reveal-on-scroll reveal-rotate-up-right delay-300">
+                        <div class="border border-amber-800/15 rounded-xl px-8 py-14 bg-white text-center flex flex-col justify-between h-full">
+                            <div>
+                                <h3 class="text-3xl font-serif italic text-gray-900 leading-tight mb-4 text-center">Learn Astrology & <br> Vastu</h3>
+                                <div class="flex items-center justify-center gap-2 mb-8 text-amber-600/40 text-[9px]">
+                                    <span class="h-[1px] bg-amber-800/10 w-8"></span><span>✦</span><span class="h-[1px] bg-amber-800/10 w-8"></span>
+                                </div>
+                            </div>
+                            <button class="whatsapp-glow bg-[#25D366] text-white px-10 py-4 rounded-full flex items-center justify-center gap-3 mx-auto font-bold uppercase text-xs tracking-widest">
+                                <i class="fab fa-whatsapp text-lg"></i> Join Online Classes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: See My Work Section -->
+        <section class="presentation-section py-8 flex flex-col justify-center" data-title="Portfolio">
+            <div class="container mx-auto px-6 md:px-8 w-full parallax-content">
+                <div class="border-2 border-amber-800/10 p-2 rounded-2xl bg-[#fefcf8] reveal-on-scroll reveal-scale">
+                    <div class="border border-amber-800/20 rounded-xl px-6 py-8 md:p-8 bg-[#faf6f0]">
+                        <div class="text-center mb-6">
+                            <h2 class="text-4xl font-serif text-gray-900 italic reveal-on-scroll reveal-scale-up delay-100">See My Work</h2>
+                            <div class="flex items-center justify-center my-4">
+                                <div class="h-[1px] bg-amber-800/30 flex-1 max-w-[200px] relative"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rotate-45 bg-amber-800/40"></div></div>
+                                <div class="flex items-center space-x-1.5 px-4 text-amber-700/60 text-xs"><span>✦</span><span class="text-sm">❖</span><span class="text-lg">❖</span><span class="text-sm">❖</span><span>✦</span></div>
+                                <div class="h-[1px] bg-amber-800/30 flex-1 max-w-[200px] relative"><div class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rotate-45 bg-amber-800/40"></div></div>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <!-- Card 1 -->
+                            <div class="bg-white rounded-xl overflow-hidden p-4 shadow-sm hover:shadow-md transition duration-500 reveal-on-scroll reveal-fold-in delay-100">
+                                <div class="aspect-video bg-black flex items-center justify-center overflow-hidden rounded-lg mb-4 relative group">
+                                    <div class="w-[45%] h-full bg-stone-100 flex flex-col justify-between py-2 px-1 text-center border-x border-stone-300">
+                                        <span class="text-[7px] font-bold text-red-600 tracking-tighter uppercase">Donald Trump 2024</span>
+                                        <div class="w-full aspect-square border border-gray-400 p-1 flex items-center justify-center">
+                                            <div class="w-full h-full border border-dashed border-gray-400 relative">
+                                                <div class="absolute inset-0 border-b border-gray-300 transform rotate-45 origin-center scale-150"></div>
+                                                <div class="absolute inset-0 border-b border-gray-300 transform -rotate-45 origin-center scale-150"></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-[6px] text-gray-500 font-semibold leading-[1.1]">Consult NOW</span>
+                                    </div>
+                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition cursor-pointer flex items-center justify-center"><i class="fas fa-play text-white/80 text-2xl drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i></div>
+                                </div>
+                                <h3 class="font-bold text-sm text-gray-900 mb-1 font-serif">US Elections 2024</h3>
+                                <p class="text-xs text-gray-500">Predictions shared before the election outcome</p>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="bg-white rounded-xl overflow-hidden p-4 shadow-sm hover:shadow-md transition duration-500 reveal-on-scroll reveal-fold-in delay-200">
+                                <div class="aspect-video bg-emerald-950 flex items-center justify-center overflow-hidden rounded-lg mb-4 relative group">
+                                    <div class="absolute inset-0 bg-emerald-800/40 mix-blend-color z-10"></div>
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Gaurav Vadehra Portrait Image Description" class="reveal-human-figure h-full w-2/5 object-cover filter grayscale contrast-125 brightness-90 group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute bottom-4 inset-x-0 text-center z-20"><span class="block text-emerald-300 font-bold tracking-widest text-[10px] uppercase">Jupiter</span><span class="block text-yellow-400 italic text-xs font-serif">Truths</span></div>
+                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition cursor-pointer flex items-center justify-center z-20"><i class="fas fa-play text-white/80 text-2xl drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i></div>
+                                </div>
+                                <h3 class="font-bold text-sm text-gray-900 mb-1 font-serif">Jupiter Truths</h3>
+                                <p class="text-xs text-gray-500">Understanding Jupiter's role in a new light</p>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="bg-white rounded-xl overflow-hidden p-4 shadow-sm hover:shadow-md transition duration-500 reveal-on-scroll reveal-fold-in delay-300">
+                                <div class="aspect-video bg-stone-900 flex items-center justify-center overflow-hidden rounded-lg mb-4 relative group">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Gaurav Vadehra Portrait Sub-Image" class="reveal-human-figure h-full w-2/5 object-cover filter grayscale contrast-100 group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-red-600/90 text-white text-[7px] px-2 py-1 rounded w-3/4 text-center tracking-tight leading-tight z-10">With almost THREE DECADES of Prashna Jyotish</div>
+                                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition cursor-pointer flex items-center justify-center z-20"><i class="fas fa-play text-white/80 text-2xl drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i></div>
+                                </div>
+                                <h3 class="font-bold text-sm text-gray-900 mb-1 font-serif">Study & Learn Prashna Jyotish</h3>
+                                <p class="text-xs text-gray-500">How Prashna is used for answering real life questions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: From The Blog Section -->
+        <section class="presentation-section py-12 flex flex-col justify-center" data-title="Blog">
+            <div class="container mx-auto px-8 w-full parallax-content">
+                <div class="text-center mb-2">
+                    <span class="text-amber-700/60 text-xs reveal-on-scroll reveal-scale-up">❖</span>
+                    <h2 class="text-4xl font-serif text-gray-900 italic mt-2 reveal-on-scroll reveal-scale-up delay-100">From the Blog</h2>
+                    <div class="text-amber-700/50 text-[10px] mt-2 reveal-on-scroll reveal-scale-up delay-150">✦</div>
+                </div>
+                <div class="grid md:grid-cols-4 gap-6 mt-6">
+                    <!-- Blog Card 1 -->
+                    <div class="bg-[#fcfaf6] border border-amber-800/10 rounded-2xl overflow-hidden p-3 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between reveal-on-scroll reveal-rise delay-100">
+                        <div>
+                            <div class="rounded-xl overflow-hidden h-36 mb-4 relative group"><img src="https://images.unsplash.com/photo-1515942400758-44fb0a191405?w=500&q=80" alt="Vedic Astrology Wheel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>
+                            <h3 class="font-bold text-gray-800 text-sm mb-4 text-center leading-snug">Why Vedic Astrology Is Timeless?</h3>
+                        </div>
+                        <div class="px-2 text-center">
+                            <div class="flex items-center justify-center mb-2 text-amber-700/30 text-[8px]"><span class="h-[1px] bg-amber-800/20 w-8"></span><span class="mx-2">✦</span><span class="h-[1px] bg-amber-800/20 w-8"></span></div>
+                            <a href="#" class="text-xs gold-text font-bold hover:underline inline-flex items-center gap-1">Read More <i class="fas fa-arrow-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Card 2 -->
+                    <div class="bg-[#fcfaf6] border border-amber-800/10 rounded-2xl overflow-hidden p-3 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between reveal-on-scroll reveal-rise delay-200">
+                        <div>
+                            <div class="rounded-xl overflow-hidden h-36 mb-4 relative group"><img src="https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=500&q=80" alt="Vastu Compass" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>
+                            <h3 class="font-bold text-gray-800 text-sm mb-4 text-center leading-snug">Vastu Tips for Wealth & Prosperity</h3>
+                        </div>
+                        <div class="px-2 text-center">
+                            <div class="flex items-center justify-center mb-2 text-amber-700/30 text-[8px]"><span class="h-[1px] bg-amber-800/20 w-8"></span><span class="mx-2">✦</span><span class="h-[1px] bg-amber-800/20 w-8"></span></div>
+                            <a href="#" class="text-xs gold-text font-bold hover:underline inline-flex items-center gap-1">Read More <i class="fas fa-arrow-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Card 3 -->
+                    <div class="bg-[#fcfaf6] border border-amber-800/10 rounded-2xl overflow-hidden p-3 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between reveal-on-scroll reveal-rise delay-300">
+                        <div>
+                            <div class="rounded-xl overflow-hidden h-36 mb-4 relative group"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&q=80" alt="Meditation Practices" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>
+                            <h3 class="font-bold text-gray-800 text-sm mb-4 text-center leading-snug">Meditation Practices for Inner Peace</h3>
+                        </div>
+                        <div class="px-2 text-center">
+                            <div class="flex items-center justify-center mb-2 text-amber-700/30 text-[8px]"><span class="h-[1px] bg-amber-800/20 w-8"></span><span class="mx-2">✦</span><span class="h-[1px] bg-amber-800/20 w-8"></span></div>
+                            <a href="#" class="text-xs gold-text font-bold hover:underline inline-flex items-center gap-1">Read More <i class="fas fa-arrow-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Card 4 -->
+                    <div class="bg-[#fcfaf6] border border-amber-800/10 rounded-2xl overflow-hidden p-3 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between reveal-on-scroll reveal-rise delay-400">
+                        <div>
+                            <div class="rounded-xl overflow-hidden h-36 mb-4 relative group"><img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=500&q=80" alt="Planetary Transits" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>
+                            <h3 class="font-bold text-gray-800 text-sm mb-4 text-center leading-snug">Understanding Planetary Transits</h3>
+                        </div>
+                        <div class="px-2 text-center">
+                            <div class="flex items-center justify-center mb-2 text-amber-700/30 text-[8px]"><span class="h-[1px] bg-amber-800/20 w-8"></span><span class="mx-2">✦</span><span class="h-[1px] bg-amber-800/20 w-8"></span></div>
+                            <a href="#" class="text-xs gold-text font-bold hover:underline inline-flex items-center gap-1">Read More <i class="fas fa-arrow-right text-[10px]"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center mt-8 reveal-on-scroll reveal-scale delay-200">
+                    <div class="h-[1px] bg-amber-800/20 flex-1 max-w-[150px] relative"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rotate-45 bg-amber-800/30"></div></div>
+                    <button class="mx-6 px-8 py-3 bg-[#a27b3d] text-white rounded-md font-medium hover:bg-[#8d672f] transition flex items-center gap-3 text-xs uppercase tracking-wider shadow-sm"><i class="fas fa-book-open"></i> View All Articles <i class="fas fa-arrow-right"></i></button>
+                    <div class="h-[1px] bg-amber-800/20 flex-1 max-w-[150px] relative"><div class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rotate-45 bg-amber-800/30"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Footer Section -->
+        <footer class="presentation-section dark-bg text-white py-12 border-t border-amber-500/10 flex flex-col justify-center" data-title="Contact">
+            <div class="container mx-auto px-8 grid md:grid-cols-4 gap-12 w-full parallax-content">
+                <div class="reveal-on-scroll reveal-rise delay-100">
+                    <h4 class="gold-text mb-6 font-bold text-lg font-serif">Gaurav Vadehra</h4>
+                    <p class="text-xs text-gray-400 italic">Guiding your journey with Astrology, Vastu & Spiritual insight.</p>
+                </div>
+                <div class="reveal-on-scroll reveal-rise delay-200">
+                    <h4 class="text-sm font-bold uppercase mb-6 tracking-wider">Links</h4>
+                    <ul class="text-xs text-gray-400 space-y-4">
+                        <li class="hover:text-amber-500 transition cursor-pointer">About Me</li>
+                        <li class="hover:text-amber-500 transition cursor-pointer">Consultation</li>
+                        <li class="hover:text-amber-500 transition cursor-pointer">Courses</li>
+                    </ul>
+                </div>
+                <div class="reveal-on-scroll reveal-rise delay-300">
+                    <h4 class="text-sm font-bold uppercase mb-6 tracking-wider">Contact</h4>
+                    <p class="text-xs text-gray-400"><i class="fas fa-envelope gold-text mr-2"></i> info@gauravvadehra.com</p>
+                </div>
+                <div class="reveal-on-scroll reveal-rise delay-450">
+                    <h4 class="text-sm font-bold uppercase mb-6 tracking-wider">Newsletter</h4>
+                    <div class="flex border-b border-gray-600 pb-2">
+                        <input type="text" placeholder="Email" class="bg-transparent text-xs w-full outline-none">
+                        <button class="gold-text hover:text-amber-600 transition"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Script Routing Matrix and Control Handler -->
+    <script>
+        let goToSection; 
+        let simulateIps;
+        let toggleAtmosphere;
+        let audioContext = null;
+        let oscillator = null;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.querySelector('.presentation-container');
+            const sections = document.querySelectorAll('.presentation-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            let currentIndex = 0;
+            let timer = null;
+            let autoCycleActive = true; 
+            let isHoveredPaused = false;
+            const cooldownTime = 4000; // 4 seconds display duration
+
+            const transitionClasses = [
+                'slide-push-next', 'cube-flip-next', 'scale-blur-next', 
+                'skew-slide-next', 'depth-drop-next', 'shutter-next', 'soft-fade-next', 'slide-push-next'
+            ];
+            const transitionPrevClasses = [
+                'slide-push-prev', 'cube-flip-prev', 'scale-blur-prev', 
+                'skew-slide-prev', 'depth-drop-prev', 'shutter-prev', 'soft-fade-prev', 'slide-push-prev'
+            ];
+
+            function revealElements(section) {
+                const anims = section.querySelectorAll('.reveal-on-scroll, .reveal-width, .reveal-width-center, .reveal-bg-zoom, .reveal-flip-3d, .reveal-fade-right, .reveal-scale-up, .reveal-skew-right, .reveal-blur-left, .reveal-rotate-up-left, .reveal-rotate-up-right, .reveal-fold-in, .reveal-rise, .reveal-human-figure');
+                anims.forEach(el => el.classList.add('revealed'));
+            }
+
+            function resetElements(section) {
+                const anims = section.querySelectorAll('.reveal-on-scroll, .reveal-width, .reveal-width-center, .reveal-bg-zoom, .reveal-flip-3d, .reveal-fade-right, .reveal-scale-up, .reveal-skew-right, .reveal-blur-left, .reveal-rotate-up-left, .reveal-rotate-up-right, .reveal-fold-in, .reveal-rise, .reveal-human-figure');
+                anims.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function updateNavHighlights(index) {
+                navLinks.forEach(link => link.classList.remove('active-link'));
+                let navMap = [0, 1, 2, 3, 4, 4, 4, 5, 5]; 
+                let targetNavIndex = navMap[index] !== undefined ? navMap[index] : 0;
+                if(navLinks[targetNavIndex]) {
+                    navLinks[targetNavIndex].classList.add('active-link');
+                }
+            }
+
+            function clearTransitions(section) {
+                const classes = [...transitionClasses, ...transitionPrevClasses];
+                section.classList.remove(...classes);
+            }
+
+            goToSection = function(index) {
+                if (index < 0 || index >= sections.length || index === currentIndex) return;
+
+                let isForward = index > currentIndex;
+                let prevSection = sections[currentIndex];
+                let nextSection = sections[index];
+
+                prevSection.classList.remove('active-slide');
+                resetElements(prevSection);
+                clearTransitions(nextSection);
+
+                let chosenClass = isForward 
+                    ? (transitionClasses[currentIndex] || 'slide-push-next') 
+                    : (transitionPrevClasses[index] || 'slide-push-prev');
+
+                nextSection.classList.add(chosenClass);
+                void nextSection.offsetWidth; // Repaint trigger
+                nextSection.classList.add('active-slide');
+                
+                currentIndex = index;
+                updateNavHighlights(currentIndex);
+
+                setTimeout(() => {
+                    revealElements(nextSection);
+                    sections.forEach((sec, idx) => {
+                        if(idx !== currentIndex) {
+                            sec.classList.remove('active-slide');
+                            clearTransitions(sec);
+                        }
+                    });
+                }, 150);
+
+                if (autoCycleActive) {
+                    clearTimeout(timer);
+                    if (!isHoveredPaused) {
+                        timer = setTimeout(nextSectionLoop, cooldownTime);
+                    }
+                }
+            };
+
+            function nextSectionLoop() {
+                if (!autoCycleActive || isHoveredPaused) return;
+                if (currentIndex >= sections.length - 1) {
+                    autoCycleActive = false;
+                    clearTimeout(timer);
+                    return;
+                }
+                goToSection(currentIndex + 1);
+            }
+
+            // --- Smart Pause Enhancement ---
+            container.addEventListener('mouseenter', () => {
+                isHoveredPaused = true;
+                clearTimeout(timer);
+            });
+
+            container.addEventListener('mouseleave', () => {
+                isHoveredPaused = false;
+                if (autoCycleActive) {
+                    clearTimeout(timer);
+                    timer = setTimeout(nextSectionLoop, cooldownTime);
+                }
+            });
+
+            // --- Interactive IPS Simulator Logic ---
+            simulateIps = function(type) {
+                const display = document.getElementById('ips-display-text');
+                const matrix = {
+                    breath: "💨 Swara Input: Left Nostril Dominance (Ida Nadi) identified. Active cooling state ideal for building design planning and long-term financial investments.",
+                    elements: "🔥 Pancha Mahabhuta: High Agni (Fire element) registered in current environment grid room. Conducive for assertive closures, testing security installations, or executing sharp changes.",
+                    direction: "🧭 Compass Vector: Current subject query arrives from North-East quadrant (Isanya). Highly positive indicator signifying direct divine alignment and rapid conflict resolution.",
+                    sound: "🎵 Akasha Echoes: Clear bird sound patterns noticed at second interval. Deciphers as immediate confirmation that ongoing negotiations will succeed within 72 hours."
+                };
+                
+                display.style.opacity = '0';
+                setTimeout(() => {
+                    display.innerText = matrix[type] || "Awaiting structural environment inputs...";
+                    display.style.opacity = '1';
+                }, 150);
+
+                // Highlight chosen simulator button frame edge
+                document.querySelectorAll('.ips-btn').forEach(btn => btn.classList.remove('border-amber-500'));
+                event.currentTarget.classList.add('border-amber-500');
+            };
+
+            // --- Ambient Aura Audio System Framework ---
+            toggleAtmosphere = function() {
+                const btn = document.getElementById('audio-toggle');
+                const text = document.getElementById('audio-status');
+                
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    oscillator = audioContext.createOscillator();
+                    let gainNode = audioContext.createGain();
+                    
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(136.1, audioContext.currentTime); // 136.1Hz Om/Spiritual cosmic frequency
+                    gainNode.gain.setValueAtTime(0.06, audioContext.currentTime); // Keep output softly embedded
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.start();
+                    
+                    btn.classList.add('playing');
+                    text.innerText = "Aura On";
+                    text.classList.add('text-amber-600');
+                } else {
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                        btn.classList.add('playing');
+                        text.innerText = "Aura On";
+                    } else if (audioContext.state === 'running') {
+                        audioContext.suspend();
+                        btn.classList.remove('playing');
+                        text.innerText = "Aura Off";
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                    if (currentIndex < sections.length - 1) goToSection(currentIndex + 1);
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                    if (currentIndex > 0) goToSection(currentIndex - 1);
+                }
+            });
+
+            revealElements(sections[0]);
+            timer = setTimeout(nextSectionLoop, cooldownTime);
+        });
+    </script>
+</body>
+</html>
